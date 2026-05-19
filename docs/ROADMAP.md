@@ -1,31 +1,40 @@
 # Roadmap
 
-This public release is a cleaned, source-focused baseline. It is intended to be usable by developers, but each deployment still needs local configuration.
+**Language:** English | [中文](ROADMAP.zh-CN.md)
 
-## Complete enough to use
+This roadmap describes the public repository state for `pricereader`. It separates what is ready to use from what each user should complete in their own environment.
 
-- FastAPI app and tests are included
-- Rule/config system is included
-- Example config is included
-- Webhook notifier is optional
+## Complete Enough To Use
 
-## Needs local completion
+- Rule engine and adapters
+- Runtime config APIs
+- Scheduler and notification pipeline
+- Pytest suite
 
-- Private rule file with your own keywords and price thresholds
-- Decision on which source adapters are legal and appropriate for your use
-- Notification webhook if desired
-- Persistent data directory
+## Needs Local Completion
 
-## Suggested improvements
+- Private source/rule configuration
+- Production notification target
+- Rate-limit and politeness settings for your source list
+- Authentication if exposed beyond localhost
 
-- Write a private rules file from a natural language shopping list
-- Add a new source adapter
-- Add notification formatting for another chat app
-- Add a dashboard screenshot and demo dataset
+## Suggested Improvements
 
-## Documentation still worth adding
+- Add new source adapters
+- Add UI tests for runtime config editing
+- Improve duplicate/mute workflows
+- Add auth and audit logging for shared deployments
 
-- Real screenshots or short demo videos.
-- A known-good production deployment example for a generic Linux host.
-- Troubleshooting notes collected from real user deployments.
+## Documentation Still Worth Adding
 
+- Screenshots or short screen recordings using non-private demo data.
+- A fuller API example page for common requests and responses.
+- Backup and restore notes for any persistent data path.
+- A troubleshooting page based on real public issues once users start deploying it.
+
+## Maintenance Notes
+
+- Keep public examples generic.
+- Keep English and Chinese instructions aligned.
+- Prefer small issues and pull requests so AI-assisted contributors can work safely.
+- Re-run sensitive-data scans before publishing new releases.

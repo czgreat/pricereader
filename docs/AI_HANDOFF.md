@@ -1,48 +1,64 @@
 # AI Handoff Guide
 
-This document is written for people who want to use an AI coding assistant to run, customize, or deploy this repository.
+**Language:** English | [中文](AI_HANDOFF.zh-CN.md)
 
+Use this file when handing `pricereader` to an AI coding assistant. It gives the assistant enough context to make useful changes without depending on private deployment history.
 
-## How to use this repo with an AI coding assistant
+## First 15 Minutes
 
-Give the assistant three things at the start of a new thread:
+1. Read `README.md`, this file, and `docs/DEPLOYMENT.md`.
+2. Inspect the repository layout table in `README.md`.
+3. Run the validation command before editing anything substantial.
+4. Confirm whether the task is documentation, tests, local deployment, or product code.
+5. Keep all private credentials, state, media, and production data outside the repository.
 
-1. This repository URL.
-2. The target environment: local development, Docker, NAS, VPS, or another host.
-3. Which path you want: quick demo, production deployment, feature change, bug fix, or integration.
+## Project Summary
 
-Suggested prompt:
+PriceReader monitors configured public sources, normalizes items, evaluates deterministic rules, stores matches, and can notify downstream services.
+
+## Important Paths
+
+| Path | Purpose |
+|---|---|
+| `app/main.py` | FastAPI app entrypoint |
+| `app/api/routes.py` | Runtime API routes |
+| `app/` | Adapters, extraction, storage, rules, notifications, scheduler |
+| `tests/` | Behavior and API tests |
+| `config.example.yml` | Public-safe config template |
+
+## Good First Tasks
+
+- Add new source adapters
+- Add UI tests for runtime config editing
+- Improve duplicate/mute workflows
+- Add auth and audit logging for shared deployments
+
+## Context To Provide To An AI Assistant
+
+- The repository URL and branch.
+- Your operating system and runtime versions.
+- The exact command that fails or the exact workflow you want improved.
+- Sanitized logs with secrets removed.
+- Whether you are using local development, Docker, or manual deployment.
+- Any constraints around privacy, public sharing, or supported platforms.
+
+## Suggested Prompt
 
 ```text
-Read README.md, docs/DEPLOYMENT.md, docs/AI_HANDOFF.md, and docs/ROADMAP.md first.
-My target is <local Docker / Linux server / NAS / cloud VM>.
-Help me get this project running end to end, preserve secrets in .env, and tell me exactly what values I need to provide.
+You are working in the pricereader repository. Read README.md, docs/DEPLOYMENT.md, and docs/AI_HANDOFF.md first. Keep changes small, preserve public-safe examples, do not add real secrets, and run the documented validation command before summarizing changes.
 ```
-
-
-## Project summary
-
-Self-hosted deal monitoring service with source adapters, rules, scheduler, storage, and optional notifications.
-
-## Good first tasks for an AI assistant
-
-- Write a private rules file from a natural language shopping list
-- Add a new source adapter
-- Add notification formatting for another chat app
-- Add a dashboard screenshot and demo dataset
-
-## Context to provide to the assistant
-
-- Operating system and CPU architecture.
-- Whether Docker is available.
-- Whether this is local-only or exposed through a reverse proxy.
-- Which secrets or API keys you will provide through `.env`.
-- Any real data paths, but do not paste secrets into chat unless you accept that risk.
 
 ## Guardrails
 
-- Do not commit `.env`, cookies, tokens, databases, uploads, logs, or generated build artifacts.
-- Prefer editing `.env.example` for documentation and `.env` only locally.
-- Keep deployment-specific paths out of source code.
-- Run the checks listed in `docs/DEPLOYMENT.md` before committing changes.
+- Do not add private `.env` values, API keys, cookies, webhook secrets, local IP addresses, production URLs, personal records, or generated artifacts.
+- Prefer focused tests over broad rewrites.
+- Keep public examples generic and runnable on a clean machine.
+- Update both English and Chinese docs when changing user-facing instructions.
+- If deployment behavior changes, update `docs/DEPLOYMENT.md` and `docs/DEPLOYMENT.zh-CN.md` in the same change.
 
+## Definition Of Done
+
+- The requested behavior or documentation change is complete.
+- Validation commands pass, or any skipped check is explicitly explained.
+- README links still work.
+- No private data or generated artifacts are committed.
