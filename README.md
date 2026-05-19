@@ -18,6 +18,18 @@ PriceReader monitors configured public sources, normalizes items, evaluates dete
 - Scheduler, source health checks, and pause/resume controls
 - Stored item, evaluation, match, muted item, and notification views
 
+## Who This Is For
+
+- Users maintaining private deal watchlists
+- Developers adding source adapters or rule logic
+- Self-hosters who want local control over notifications
+
+## Not For
+
+- Bypassing source terms of service
+- Public deployment without auth
+- Committing real watchlists, cookies, or notification URLs
+
 ## Current Public Release
 
 Ready to use:
@@ -103,8 +115,11 @@ python -m compileall app tests
 | Topic | English | Chinese |
 |---|---|---|
 | Deployment | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | [docs/DEPLOYMENT.zh-CN.md](docs/DEPLOYMENT.zh-CN.md) |
+| Usage/API examples | [docs/USAGE_EXAMPLES.md](docs/USAGE_EXAMPLES.md) | [docs/USAGE_EXAMPLES.zh-CN.md](docs/USAGE_EXAMPLES.zh-CN.md) |
+| Screenshots | [docs/SCREENSHOTS.md](docs/SCREENSHOTS.md) | [docs/SCREENSHOTS.zh-CN.md](docs/SCREENSHOTS.zh-CN.md) |
 | AI handoff | [docs/AI_HANDOFF.md](docs/AI_HANDOFF.md) | [docs/AI_HANDOFF.zh-CN.md](docs/AI_HANDOFF.zh-CN.md) |
 | Roadmap | [docs/ROADMAP.md](docs/ROADMAP.md) | [docs/ROADMAP.zh-CN.md](docs/ROADMAP.zh-CN.md) |
+| Changelog | [CHANGELOG.md](CHANGELOG.md) | [CHANGELOG.zh-CN.md](CHANGELOG.zh-CN.md) |
 
 ## AI-Assisted Development
 
