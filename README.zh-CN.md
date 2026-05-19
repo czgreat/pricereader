@@ -55,3 +55,9 @@ docker compose up --build
 
 MIT
 
+## 更多文档
+
+- [部署说明](docs/DEPLOYMENT.md)
+- [AI 接手说明](docs/AI_HANDOFF.md)
+- [路线图](docs/ROADMAP.md)
+

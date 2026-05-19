@@ -55,3 +55,9 @@ Start from `config.example.yml`, then point `PRICEREADER_CONFIG` to your own pri
 
 MIT
 
+## More documentation
+
+- [Deployment guide](docs/DEPLOYMENT.md)
+- [AI handoff guide](docs/AI_HANDOFF.md)
+- [Roadmap](docs/ROADMAP.md)
+
