@@ -1,0 +1,14 @@
+rules:
+  - name: example-rule
+    keywords: ["example keyword"]
+    max_price: 9999
+    enabled: true
+
+sources:
+  - name: example-source
+    type: rss
+    url: https://example.com/feed.xml
+    enabled: false
+
+notifications:
+  webhook_url: ""

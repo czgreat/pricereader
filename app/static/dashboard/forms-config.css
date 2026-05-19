@@ -1,0 +1,286 @@
+.section-kicker {
+  margin: 0 0 6px;
+  color: var(--accent-2);
+  font: 700 11px/1 system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.section-copy {
+  margin: 0;
+  color: var(--muted);
+  font: 13px/1.5 system-ui, sans-serif;
+}
+.list-panel {
+  display: grid;
+  gap: 10px;
+  max-height: none;
+  overflow: visible;
+  padding-right: 6px;
+}
+.select-card {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 14px 15px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.58), rgba(236, 243, 255, 0.52));
+  cursor: pointer;
+  display: grid;
+  gap: 6px;
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  backdrop-filter: blur(calc(var(--blur) * 0.85));
+}
+.select-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: rgba(42, 109, 245, 0.5);
+}
+.select-card.active {
+  border-color: rgba(42, 109, 245, 0.34);
+  box-shadow: inset 0 0 0 1px rgba(42, 109, 245, 0.18), 0 18px 30px rgba(72, 108, 166, 0.12);
+  background: linear-gradient(135deg, rgba(42, 109, 245, 0.1), rgba(255, 255, 255, 0.58));
+}
+.select-card-title {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.35;
+}
+.select-card-meta {
+  color: var(--muted);
+  font: 13px/1.45 system-ui, sans-serif;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(260px, 520px));
+  justify-content: start;
+  gap: 14px;
+}
+.form-grid .full { grid-column: span 2; }
+.field {
+  display: grid;
+  gap: 8px;
+}
+label {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  font-size: 14px;
+}
+textarea, input, select {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 18px;
+  border: 1px solid rgba(159, 178, 205, 0.4);
+  padding: 12px 14px;
+  font: 14px/1.5 "SFMono-Regular", Consolas, monospace;
+  background: rgba(255, 255, 255, 0.56);
+  color: var(--ink);
+  backdrop-filter: blur(calc(var(--blur) * 0.7));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.44);
+}
+textarea {
+  min-height: 112px;
+  resize: vertical;
+}
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding-top: 8px;
+}
+.checkbox input {
+  width: auto;
+  transform: scale(1.1);
+}
+.hint {
+  color: var(--muted);
+  font: 12px/1.5 system-ui, sans-serif;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font: 600 12px/1 system-ui, sans-serif;
+  border: 1px solid transparent;
+  width: fit-content;
+}
+.ok {
+  color: var(--ok);
+  background: rgba(45, 125, 85, 0.1);
+  border-color: rgba(45, 125, 85, 0.14);
+}
+.warn {
+  color: var(--warn);
+  background: rgba(173, 107, 31, 0.1);
+  border-color: rgba(173, 107, 31, 0.14);
+}
+.bad {
+  color: var(--bad);
+  background: rgba(161, 60, 53, 0.1);
+  border-color: rgba(161, 60, 53, 0.14);
+}
+.inline-flags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.source-checkboxes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.42);
+  backdrop-filter: blur(calc(var(--blur) * 0.75));
+}
+.source-checkboxes label {
+  font-weight: 600;
+  font-size: 13px;
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.58);
+}
+.rule-list-toolbar,
+.rule-action-toolbar {
+  display: grid;
+  gap: 12px;
+}
+.rule-list-toolbar {
+  margin-bottom: 14px;
+}
+.rule-search {
+  width: 100%;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.56);
+  color: var(--ink);
+  padding: 12px 14px;
+  font: 14px/1.45 system-ui, sans-serif;
+  backdrop-filter: blur(calc(var(--blur) * 0.8));
+}
+.rule-collection {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: rgba(248, 251, 255, 0.46);
+  backdrop-filter: blur(calc(var(--blur) * 0.8));
+}
+.rule-collection-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  color: var(--muted);
+  font: 13px/1.4 system-ui, sans-serif;
+}
+.editor-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+.editor-tab {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 10px 14px;
+  font: 600 13px/1 system-ui, sans-serif;
+  cursor: pointer;
+}
+.editor-tab.active {
+  background: linear-gradient(135deg, rgba(42, 109, 245, 0.92), rgba(86, 149, 255, 0.95));
+  color: #fff;
+  border-color: transparent;
+}
+.editor-panel {
+  display: none;
+}
+.editor-panel.active {
+  display: block;
+}
+.editor-section h4 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  line-height: 1.25;
+}
+.rule-callout {
+  border: 1px dashed rgba(42, 109, 245, 0.32);
+  border-radius: 16px;
+  padding: 12px 14px;
+  background: rgba(245, 248, 255, 0.54);
+  color: var(--muted);
+  font: 13px/1.5 system-ui, sans-serif;
+}
+.rule-summary-preview {
+  position: relative;
+  border: 1px solid rgba(42, 109, 245, 0.18);
+  border-radius: 16px;
+  padding: 14px 16px;
+  background: rgba(240, 246, 255, 0.62);
+  color: var(--ink);
+  font: 14px/1.55 system-ui, sans-serif;
+  overflow: hidden;
+  backdrop-filter: blur(calc(var(--blur) * 0.8));
+}
+.rule-summary-preview::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: rgba(42, 109, 245, 0.74);
+}
+.rule-summary-preview strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--accent-2);
+  font: 700 12px/1 system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.rule-mode-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+.rule-mode-card {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.52);
+  padding: 14px;
+  display: grid;
+  gap: 6px;
+  overflow: hidden;
+  backdrop-filter: blur(calc(var(--blur) * 0.8));
+}
+.rule-mode-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: rgba(122, 147, 199, 0.72);
+}
+.rule-mode-card h4 {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.25;
+}
+.rule-mode-card p {
+  margin: 0;
+  color: var(--muted);
+  font: 13px/1.45 system-ui, sans-serif;
+}

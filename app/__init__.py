@@ -1,0 +1,2 @@
+"""PriceReader application package."""
+

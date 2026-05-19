@@ -1,0 +1,238 @@
+:root {
+  color-scheme: light;
+  --bg: #dfe8f5;
+  --panel: rgba(255, 255, 255, 0.56);
+  --panel-strong: rgba(255, 255, 255, 0.78);
+  --panel-soft: rgba(244, 248, 255, 0.52);
+  --panel-alt: rgba(232, 239, 250, 0.64);
+  --ink: #18212f;
+  --muted: #586478;
+  --line: rgba(159, 178, 205, 0.38);
+  --accent: #2a6df5;
+  --accent-2: #4a89ff;
+  --accent-3: #7a93c7;
+  --ok: #238a67;
+  --warn: #b97b1f;
+  --bad: #c24f5a;
+  --glass-highlight: rgba(255, 255, 255, 0.68);
+  --glass-shadow: rgba(70, 95, 140, 0.14);
+  --shadow: 0 24px 52px rgba(56, 79, 120, 0.14);
+  --shadow-soft: 0 14px 28px rgba(70, 95, 140, 0.1);
+  --shadow-raise: 0 28px 64px rgba(56, 79, 120, 0.18);
+  --blur: 22px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top left, rgba(74, 137, 255, 0.22), transparent 24%),
+    radial-gradient(circle at top right, rgba(180, 206, 255, 0.32), transparent 20%),
+    radial-gradient(circle at bottom right, rgba(137, 169, 227, 0.18), transparent 24%),
+    linear-gradient(180deg, #eef4ff 0%, var(--bg) 100%);
+  color: var(--ink);
+  font: 15px/1.55 "Avenir Next", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.app-shell {
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  min-height: 100vh;
+}
+.sidebar {
+  position: relative;
+  top: 0;
+  align-self: start;
+  border-right: 1px solid rgba(159, 178, 205, 0.28);
+  background: linear-gradient(180deg, rgba(237, 244, 255, 0.82), rgba(221, 232, 249, 0.7));
+  box-shadow: 18px 0 48px rgba(70, 95, 140, 0.08);
+  backdrop-filter: blur(var(--blur));
+  padding: 22px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  overflow: visible;
+}
+.sidebar::before {
+  content: "";
+  position: absolute;
+  inset: 18px 16px auto 16px;
+  height: 96px;
+  border-radius: 28px;
+  background: linear-gradient(135deg, rgba(74, 137, 255, 0.22), rgba(255, 255, 255, 0.12));
+  pointer-events: none;
+}
+.sidebar-panel {
+  position: relative;
+  z-index: 1;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--panel);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  backdrop-filter: blur(var(--blur));
+}
+.sidebar-brand {
+  padding: 18px 18px 16px;
+}
+.sidebar-brand h1 {
+  margin: 0 0 8px;
+  font-size: 30px;
+  line-height: 1.05;
+  font-family: "Iowan Old Style", "Noto Serif SC", Georgia, serif;
+}
+.sidebar-brand p {
+  margin: 0;
+  color: var(--muted);
+  font: 13px/1.5 system-ui, sans-serif;
+}
+.sidebar-status {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 10px;
+}
+.sidebar-status-card {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 12px 14px;
+  display: grid;
+  gap: 4px;
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  backdrop-filter: blur(calc(var(--blur) * 0.8));
+}
+.sidebar-status-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: rgba(42, 109, 245, 0.78);
+}
+.sidebar-status-card small {
+  color: var(--muted);
+  font: 12px/1.4 system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.sidebar-status-card span {
+  color: var(--ink);
+  font: 600 14px/1.45 system-ui, sans-serif;
+}
+.sidebar-nav {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 10px;
+}
+.nav-button {
+  justify-content: flex-start;
+  width: 100%;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.58);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-soft);
+  padding: 14px 16px;
+  backdrop-filter: blur(calc(var(--blur) * 0.85));
+  transition: transform 220ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 220ms cubic-bezier(0.23, 1, 0.32, 1), background 220ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.nav-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 34px rgba(70, 95, 140, 0.14);
+}
+.nav-button.active {
+  background: linear-gradient(135deg, rgba(42, 109, 245, 0.92), rgba(86, 149, 255, 0.95));
+  color: #fff;
+  border-color: transparent;
+}
+.nav-button small {
+  display: block;
+  opacity: 0.78;
+  font: 12px/1.4 system-ui, sans-serif;
+}
+.sidebar-footer {
+  margin-top: auto;
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+}
+.workspace {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba(245, 249, 255, 0.82) 0%, rgba(226, 236, 251, 0.82) 100%);
+}
+.workspace-topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: center;
+  padding: 22px 22px 16px;
+  border-bottom: 1px solid rgba(159, 178, 205, 0.22);
+  background: rgba(244, 248, 255, 0.58);
+  backdrop-filter: blur(calc(var(--blur) * 1.2));
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.workspace-topbar h1 {
+  margin: 0 0 6px;
+  font-size: 32px;
+  line-height: 1.1;
+}
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--accent-2);
+  font: 700 12px/1 system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+.topbar-note {
+  position: relative;
+  max-width: 260px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.56);
+  box-shadow: var(--shadow-soft);
+  display: grid;
+  gap: 6px;
+  overflow: hidden;
+  backdrop-filter: blur(calc(var(--blur) * 0.9));
+}
+.topbar-note::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), rgba(132, 184, 255, 0.95));
+}
+.topbar-note strong {
+  font: 700 12px/1 system-ui, sans-serif;
+  color: var(--accent-2);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.topbar-note span {
+  color: var(--muted);
+  font: 13px/1.5 system-ui, sans-serif;
+}
+.workspace-scroll {
+  flex: 1;
+  overflow: visible;
+  padding: 26px 30px 34px;
+  display: flex;
+  justify-content: center;
+}
+.workspace-section {
+  display: none;
+}
+.workspace-section.active {
+  display: block;
+  width: min(100%, 1520px);
+}

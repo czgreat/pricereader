@@ -1,0 +1,70 @@
+__pycache__/
+.pytest_cache/
+.venv/
+.venv-ci/
+.env.local
+data/runtime/.env.local
+*.egg-info/
+dist/
+.release/
+*.pyc
+*.pyo
+*.pyd
+
+data/sqlite/*.db
+data/sqlite/*.sqlite
+data/sqlite/*.sqlite3
+data/media/*
+!data/media/.gitkeep
+logs/*
+!logs/.gitkeep
+test-report/*
+!test-report/.gitkeep
+
+
+# dependencies
+node_modules/
+.venv/
+venv/
+.venv-ci/
+
+# build output
+dist/
+build/
+.next/
+target/
+.gradle/
+
+# runtime data
+data/
+logs/
+uploads/
+media/
+runtime/
+cache/
+work/
+backups/
+reports/
+test-report/
+
+# local config and secrets
+.env
+.env.*
+!.env.example
+*.local
+*.secret
+*secret*
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

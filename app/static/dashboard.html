@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PriceReader 控制台</title>
+  <link rel="stylesheet" href="/static/dashboard.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-brand sidebar-panel">
+        <h1>PriceReader</h1>
+        <p>专属好价监控后台。主界面改成卡片工作台，左侧导航负责切换，右侧工作区负责专注当前任务。</p>
+      </div>
+      <div class="sidebar-status">
+        <article class="sidebar-status-card">
+          <small>版本</small>
+          <span id="version-text">版本读取中...</span>
+        </article>
+        <article class="sidebar-status-card">
+          <small>刷新</small>
+          <span id="updated-text">尚未刷新</span>
+        </article>
+        <article class="sidebar-status-card">
+          <small>动作</small>
+          <span id="action-text">等待操作</span>
+        </article>
+      </div>
+      <nav class="sidebar-nav">
+        <button class="nav-button active" data-section-nav="overview" type="button">概览<small>自动化总览与 24 小时统计</small></button>
+        <button class="nav-button" data-section-nav="runtime" type="button">运行时设置<small>Cookie、推送配置、敏感信息</small></button>
+        <button class="nav-button" data-section-nav="sources" type="button">来源配置<small>来源增删改、暂停、同步</small></button>
+        <button class="nav-button" data-section-nav="rules" type="button">规则配置<small>规则编辑、复制和校验</small></button>
+        <button class="nav-button" data-section-nav="records" data-tab-target="matches" type="button">好价历史<small>检测到的命中记录与筛选</small></button>
+        <button class="nav-button" data-section-nav="records" data-tab-target="stored" type="button">记录中心<small>条目、评估、通知、健康</small></button>
+        <button class="nav-button" data-section-nav="records" data-tab-target="audit" type="button">配置审计<small>来源、规则、运行时改动轨迹</small></button>
+      </nav>
+      <div class="sidebar-footer sidebar-panel">
+        <button id="refresh-button" type="button">刷新全部</button>
+        <button id="reload-config-button" type="button" class="secondary">重载配置</button>
+        <a class="button ghost" href="/docs">Swagger</a>
+      </div>
+    </aside>
+
+    <main class="workspace">
+      <header class="workspace-topbar">
+        <div>
+          <p class="eyebrow">Workspace</p>
+          <h1 id="workspace-title">概览</h1>
+          <p class="lead" id="workspace-subtitle">自动化主链路状态</p>
+        </div>
+        <div class="topbar-note">
+          <strong>界面方向</strong>
+          <span>当前页面以卡片分层展示核心状态、配置编辑和记录详情，减少整页长滚动的压迫感。</span>
+        </div>
+      </header>
+
+      <div class="workspace-scroll">
+        <section class="workspace-section active" data-section="overview">
+          <section class="hero">
+            <div class="hero-top">
+              <div>
+                <p class="section-kicker">Control board</p>
+                <h1>PriceReader 业务面板</h1>
+                <p class="lead">把日常查看和操作都收进卡片层级里。先看来源、规则、命中和通知的脉搏，再进入具体配置或记录详情。</p>
+              </div>
+              <div class="hero-chip-grid" id="overview-hero-cards"></div>
+            </div>
+            <div class="quick-links">
+              <button class="ghost quick-link" data-jump-section="records" data-jump-tab="matches" type="button">打开好价历史</button>
+              <button class="ghost quick-link" data-jump-section="runtime" type="button">检查运行时配置</button>
+              <button class="ghost quick-link" data-jump-section="sources" type="button">查看来源状态</button>
+              <button class="ghost quick-link" data-jump-section="rules" type="button">调整规则</button>
+            </div>
+          </section>
+          <div class="grid">
+            <article class="card span-12">
+              <div class="card-header">
+                <h2>核心指标</h2>
+                <small>自动化主链路状态</small>
+              </div>
+              <div class="card-body stats">
+                <div class="metric">
+                  <div class="metric-label">来源</div>
+                  <div class="metric-value" id="metric-sources">-</div>
+                  <div class="metric-sub" id="metric-sources-sub">读取中...</div>
+                </div>
+                <div class="metric">
+                  <div class="metric-label">规则</div>
+                  <div class="metric-value" id="metric-rules">-</div>
+                  <div class="metric-sub" id="metric-rules-sub">读取中...</div>
+                </div>
+                <div class="metric">
+                  <div class="metric-label">最近条目</div>
+                  <div class="metric-value" id="metric-items">-</div>
+                  <div class="metric-sub" id="metric-items-sub">读取中...</div>
+                </div>
+                <div class="metric">
+                  <div class="metric-label">最近通知</div>
+                  <div class="metric-value" id="metric-notifications">-</div>
+                  <div class="metric-sub" id="metric-notifications-sub">读取中...</div>
+                </div>
+              </div>
+            </article>
+            <article class="card span-4">
+              <div class="card-header">
+                <h2>集成状态</h2>
+                <small>Cookie 与微信推送</small>
+              </div>
+              <div class="card-body stack" id="overview-integrations"></div>
+            </article>
+            <article class="card span-4">
+              <div class="card-header">
+                <h2>调度状态</h2>
+                <small>来源运行与下一轮任务</small>
+              </div>
+              <div class="card-body stack" id="overview-scheduler"></div>
+            </article>
+            <article class="card span-4">
+              <div class="card-header">
+                <h2>24 小时活动</h2>
+                <small>新增、命中与通知</small>
+              </div>
+              <div class="card-body stack" id="overview-activity"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="workspace-section" data-section="runtime">
+          <div class="grid">
+            <article class="card span-12">
+              <div class="card-header">
+                <h2>运行时设置</h2>
+                <small>保存到本地持久化配置文件</small>
+              </div>
+              <div class="card-body">
+                <div class="card-strip" id="runtime-summary-cards"></div>
+                <form id="runtime-form" class="form-stack" style="margin-top: 18px;">
+                  <section class="editor-section">
+                    <div class="section-heading">
+                      <div>
+                        <p class="section-kicker">WeChat</p>
+                        <h3>微信推送</h3>
+                        <p class="section-copy">优先用于命中提醒。地址、令牌和目标标识都会写入 runtime 持久化目录，而不是 Git。</p>
+                      </div>
+                    </div>
+                    <div class="form-grid">
+                      <div class="field full">
+                        <label for="runtime_wechat_push_url">推送地址 `WECHAT_PUSH_URL`</label>
+                        <input id="runtime_wechat_push_url" type="text" placeholder="微信网关地址">
+                      </div>
+                      <div class="field full">
+                        <label for="runtime_wechat_push_token">推送令牌 `WECHAT_PUSH_TOKEN`</label>
+                        <input id="runtime_wechat_push_token" type="text" placeholder="微信网关 Bearer Token">
+                      </div>
+                      <div class="field full">
+                        <label for="runtime_wechat_target_id">目标标识 `WECHAT_TARGET_ID`</label>
+                        <input id="runtime_wechat_target_id" type="text" placeholder="默认推送 targetId">
+                      </div>
+                    </div>
+                  </section>
+                  <section class="editor-section">
+                    <div class="section-heading">
+                      <div>
+                        <p class="section-kicker">Cookies</p>
+                        <h3>来源登录态</h3>
+                        <p class="section-copy">只存放运行时必需的敏感字段。显示时默认遮罩，需要时再临时 reveal。</p>
+                      </div>
+                    </div>
+                    <div class="form-grid">
+                      <div class="field full">
+                        <label for="runtime_douban_cookie">豆瓣登录态 `DOUBAN_COOKIE`</label>
+                        <textarea id="runtime_douban_cookie" placeholder="豆瓣 Cookie"></textarea>
+                      </div>
+                      <div class="field full">
+                        <label for="runtime_smzdm_cookie">什么值得买登录态 `SMZDM_COOKIE`</label>
+                        <textarea id="runtime_smzdm_cookie" placeholder="SMZDM Cookie"></textarea>
+                      </div>
+                    </div>
+                  </section>
+                  <div class="toolbar-card">
+                    <div class="toolbar">
+                      <button type="submit">保存运行时设置</button>
+                      <button id="runtime-reveal-button" type="button" class="secondary">显示敏感值</button>
+                    </div>
+                    <div class="muted" style="margin-top: 10px;">Cookie 和推送配置不会写入 Git，只会保存到持久化 runtime 目录。</div>
+                  </div>
+                </form>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="workspace-section" data-section="sources">
+          <div class="grid">
+            <article class="card span-12">
+              <div class="card-header">
+                <h2>来源配置</h2>
+                <small>编辑、创建、删除来源</small>
+              </div>
+              <div class="card-body">
+                <div class="editor-shell">
+                  <aside class="records-column">
+                    <div class="section-heading">
+                      <div>
+                        <p class="section-kicker">Source list</p>
+                        <h3>来源列表</h3>
+                        <p class="section-copy">左侧先选来源，再在右侧卡片里编辑调度、认证和过滤策略。</p>
+                      </div>
+                    </div>
+                    <div class="list-panel" id="source-list"></div>
+                  </aside>
+                  <div class="editor-pane">
+                    <div class="card-strip" id="source-summary-cards"></div>
+                    <form id="source-form" class="form-stack">
+                      <section class="editor-section">
+                        <div class="section-heading">
+                          <div>
+                            <p class="section-kicker">Identity</p>
+                            <h3>基础信息</h3>
+                            <p class="section-copy">决定来源的标识、文件落点和抓取模式。</p>
+                          </div>
+                        </div>
+                        <div class="form-grid">
+                          <div class="field">
+                            <label for="source_file_name">文件名 `file_name`</label>
+                            <input id="source_file_name" type="text" placeholder="如 douban.yaml">
+                          </div>
+                          <div class="field">
+                            <label for="source_key">来源标识 `source_key`</label>
+                            <input id="source_key" type="text">
+                          </div>
+                          <div class="field">
+                            <label for="source_label">显示名称 `label`</label>
+                            <input id="source_label" type="text">
+                          </div>
+                          <div class="field">
+                            <label for="source_mode">模式 `mode`</label>
+                            <input id="source_mode" type="text">
+                          </div>
+                          <div class="field checkbox">
+                            <input id="source_enabled" type="checkbox">
+                            <label for="source_enabled">启用 `enabled`</label>
+                          </div>
+                          <div class="field full">
+                            <label for="source_url">页面地址 `url`</label>
+                            <input id="source_url" type="text">
+                          </div>
+                          <div class="field full">
+                            <label for="source_feed_url">订阅地址 `feed_url`</label>
+                            <input id="source_feed_url" type="text">
+                          </div>
+                        </div>
+                      </section>
+                      <section class="editor-section">
+                        <div class="section-heading">
+                          <div>
+                            <p class="section-kicker">Execution</p>
+                            <h3>调度与登录策略</h3>
+                            <p class="section-copy">这里控制轮询频率、抓取条数、页数和登录要求。</p>
+                          </div>
+                        </div>
+                        <div class="form-grid">
+                          <div class="field">
+                            <label for="source_interval">抓取频率 `interval_minutes`</label>
+                            <input id="source_interval" type="number" min="1">
+                          </div>
+                          <div class="field">
+                            <label for="source_max_items">抓取条数 `max_items`</label>
+                            <input id="source_max_items" type="number" min="1">
+                          </div>
+                          <div class="field">
+                            <label for="source_pages">页数 `pages`</label>
+                            <input id="source_pages" type="number" min="1">
+                          </div>
+                          <div class="field">
+                            <label for="source_cookie_mode">Cookie 模式 `cookie_mode`</label>
+                            <input id="source_cookie_mode" type="text">
+                          </div>
+                          <div class="field checkbox">
+                            <input id="source_require_cookie" type="checkbox">
+                            <label for="source_require_cookie">强制登录 `require_cookie`</label>
+                          </div>
+                        </div>
+                      </section>
+                      <section class="editor-section">
+                        <div class="section-heading">
+                          <div>
+                            <p class="section-kicker">Filters</p>
+                            <h3>关键词与说明</h3>
+                            <p class="section-copy">适合记录当前来源的筛选词组和抓取备注，方便后续复盘。</p>
+                          </div>
+                        </div>
+                        <div class="form-grid">
+                          <div class="field full">
+                            <label for="source_keywords">关键词组 `keywords`</label>
+                            <textarea id="source_keywords" placeholder="每行一个关键词组"></textarea>
+                          </div>
+                          <div class="field full">
+                            <label for="source_notes">说明 `notes`</label>
+                            <textarea id="source_notes" placeholder="每行一条说明"></textarea>
+                          </div>
+                        </div>
+                      </section>
+                      <div class="toolbar-card">
+                        <div class="toolbar">
+                          <button type="submit">保存来源配置</button>
+                          <button id="source-create-button" type="button" class="ghost">新建来源</button>
+                          <button id="source-duplicate-button" type="button" class="ghost">复制来源</button>
+                          <button id="source-delete-button" type="button" class="danger">删除来源</button>
+                          <button id="source-toggle-button" type="button" class="secondary">暂停/恢复</button>
+                          <button id="source-sync-button" type="button" class="tertiary">立即同步</button>
+                        </div>
+                        <div class="inline-flags" id="source-flags" style="margin-top: 12px;"></div>
+                        <div class="hint" id="source-helper" style="margin-top: 10px;"></div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="workspace-section" data-section="rules">
+          <div class="grid">
+            <article class="card span-12">
+              <div class="card-header">
+                <h2>规则配置</h2>
+                <small>编辑、创建、删除规则</small>
+              </div>
+              <div class="card-body">
+                <div class="editor-shell">
+                  <aside class="records-column">
+                    <div class="section-heading">
+                      <div>
+                        <p class="section-kicker">Rule list</p>
+                        <h3>规则管理台</h3>
+                        <p class="section-copy">这里先查找和切换规则。新建、复制、删除都放到更显眼的位置，右侧再按步骤编辑。</p>
+                      </div>
+                    </div>
+                    <div class="rule-list-toolbar">
+                      <input id="rule-search-input" class="rule-search" type="search" placeholder="搜索规则标识、关键词、价格">
+                      <button id="rule-create-shortcut" type="button">新建规则</button>
+                    </div>
+                    <div class="rule-collection">
+                      <div class="rule-collection-header">
+                        <span id="rule-list-count">规则读取中...</span>
+                        <span class="muted">点左侧卡片即可切换</span>
+                      </div>
+                      <div class="list-panel" id="rule-list"></div>
+                    </div>
+                  </aside>
+                  <div class="editor-pane">
+                    <div class="card-strip" id="rule-summary-cards"></div>
+                    <form id="rule-form" class="form-stack">
+                      <div class="toolbar-card rule-action-toolbar">
+                        <div class="section-heading">
+                          <div>
+                            <p class="section-kicker">Rule actions</p>
+                            <h3>规则操作</h3>
+                            <p class="section-copy">先选规则，再保存；如果要新增，直接点“新建规则”，系统会切到空白规则。</p>
+                          </div>
+                        </div>
+                        <div class="toolbar">
+                          <button type="submit">保存当前规则</button>
+                          <button id="rule-create-button" type="button" class="ghost">新建规则</button>
+                          <button id="rule-duplicate-button" type="button" class="ghost">复制规则</button>
+                          <button id="rule-delete-button" type="button" class="danger">删除规则</button>
+                        </div>
+                        <div class="editor-tabs" id="rule-editor-tabs">
+                          <button class="editor-tab active" data-rule-editor-panel="basic" type="button">1. 基础</button>
+                          <button class="editor-tab" data-rule-editor-panel="keywords" type="button">2. 关键词</button>
+                          <button class="editor-tab" data-rule-editor-panel="thresholds" type="button">3. 阈值</button>
+                        </div>
+                      </div>
+                      <section class="editor-section editor-panel active" data-rule-editor-panel="basic">
+                        <div class="section-heading">
+                          <div>
+                            <p class="section-kicker">Identity</p>
+                            <h3>规则基础</h3>
+                            <p class="section-copy">先把规则身份定清楚：文件名、规则标识、优先级、启停状态、来源范围。</p>
+                          </div>
+                        </div>
+                        <div class="rule-callout">建议先填 `rule_key`、优先级和来源范围，再切去后面的关键词与阈值。</div>
+                        <div class="rule-summary-preview" id="rule-summary-preview">
+                          <strong>当前规则一句话</strong>
+                          <div>规则摘要读取中...</div>
+                        </div>
+                        <div class="form-grid">
+                          <div class="field">
+                            <label for="rule_file_name">规则文件名</label>
+                            <input id="rule_file_name" type="text" placeholder="如 default.yaml">
+                          </div>
+                          <div class="field">
+                            <label for="rule_key">规则代号</label>
+                            <input id="rule_key" type="text" placeholder="如 cat_food_5kg_under_400">
+                          </div>
+                          <div class="field">
+                            <label for="rule_priority">优先级</label>
+                            <input id="rule_priority" type="text">
+                          </div>
+                          <div class="field checkbox">
+                            <input id="rule_enabled" type="checkbox">
+                            <label for="rule_enabled">启用这条规则</label>
+                          </div>
+                          <div class="field full">
+                            <label>在哪些来源里生效</label>
+                            <div id="rule_sources" class="source-checkboxes"></div>
+                          </div>
+                        </div>
+                      </section>
+                      <section class="editor-section editor-panel" data-rule-editor-panel="keywords">
+                        <div class="section-heading">
+                          <div>
+                            <p class="section-kicker">Text rules</p>
+                            <h3>关键词策略</h3>
+                            <p class="section-copy">把“命中什么”“别名怎么写”“排除什么”分开填，调规则时会更直观。</p>
+                          </div>
+                        </div>
+                        <div class="rule-callout">常见做法：左边填主关键词，右边填别名；不想命中的干扰词统一放排除词。</div>
+                        <div class="form-grid">
+                          <div class="field">
+                            <label for="rule_include_keywords">必须包含这些词</label>
+                            <textarea id="rule_include_keywords" placeholder="例如：渴望、猫粮、电动牙刷；每行一个"></textarea>
+                          </div>
+                          <div class="field">
+                            <label for="rule_alias_keywords">这些写法也算命中</label>
+                            <textarea id="rule_alias_keywords" placeholder="例如：orijen、iO3；每行一个"></textarea>
+                          </div>
+                          <div class="field full">
+                            <label for="rule_exclude_keywords">出现这些词就忽略</label>
+                            <textarea id="rule_exclude_keywords" placeholder="例如：试吃、配件、收纳盒；每行一个"></textarea>
+                          </div>
+                        </div>
+                      </section>
+                      <section class="editor-section editor-panel" data-rule-editor-panel="thresholds">
+                        <div class="section-heading">
+                          <div>
+                            <p class="section-kicker">Thresholds</p>
+                            <h3>规格、价格与通知</h3>
+                            <p class="section-copy">最后再定命中边界：规格、最高价、通知冷却。看不懂时只改你真正需要的一项。</p>
+                          </div>
+                        </div>
+                        <div class="rule-callout">如果只是做“低于某价格提醒”，只需要价格上限和冷却时间；规格项可先留空。</div>
+                        <div class="rule-mode-grid">
+                          <article class="rule-mode-card">
+                            <h4>价格条件</h4>
+                            <p>设置“价格不高于多少元”。如果不限制价格，可以留空。</p>
+                          </article>
+                          <article class="rule-mode-card">
+                            <h4>规格条件</h4>
+                            <p>可选“不限制 / 按克重 / 按型号关键词”。大多数规则只需要其中一种。</p>
+                          </article>
+                          <article class="rule-mode-card">
+                            <h4>提醒节奏</h4>
+                            <p>同一条规则多久内不要重复提醒，防止刷屏。</p>
+                          </article>
+                        </div>
+                        <div class="form-grid">
+                          <div class="field">
+                            <label for="rule_price_min_cny">价格不低于（元）</label>
+                            <input id="rule_price_min_cny" type="number" min="0" step="0.01" placeholder="例如 250">
+                          </div>
+                          <div class="field">
+                            <label for="rule_price_max_cny">价格不高于（元）</label>
+                            <input id="rule_price_max_cny" type="number" min="0" step="0.01" placeholder="例如 400">
+                          </div>
+                          <div class="field">
+                            <label for="rule_cooldown_hours">重复提醒间隔（小时）</label>
+                            <input id="rule_cooldown_hours" type="number" min="1" placeholder="例如 2">
+                          </div>
+                          <div class="field">
+                            <label for="rule_spec_mode">规格限制方式</label>
+                            <select id="rule_spec_mode">
+                              <option value="">不限制规格</option>
+                              <option value="equivalent">按克重 / 斤数匹配</option>
+                              <option value="model">按型号关键词匹配</option>
+                            </select>
+                          </div>
+                          <div class="field">
+                            <label for="rule_spec_value_g">目标克重（克）</label>
+                            <input id="rule_spec_value_g" type="number" min="0" placeholder="例如 5400">
+                          </div>
+                          <div class="field full">
+                            <label for="rule_spec_aliases">常见规格 / 型号写法</label>
+                            <textarea id="rule_spec_aliases" placeholder="例如：5.4kg、5400g、iO3；每行一个"></textarea>
+                          </div>
+                          <input id="rule_price_mode" type="hidden" value="final_payable">
+                        </div>
+                      </section>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="workspace-section" data-section="records">
+          <div class="grid">
+            <article class="card span-12">
+              <div class="card-header">
+                <h2 id="records-title">记录中心</h2>
+                <small id="records-subtitle">最近条目、评估、命中、通知、健康状态</small>
+              </div>
+              <div class="card-body">
+                <section class="toolbar-card" style="margin-bottom: 14px;">
+                  <div class="section-heading">
+                    <div>
+                      <p class="section-kicker">Filters</p>
+                      <h3>筛选与检索</h3>
+                      <p class="section-copy">先选来源、规则和关键词，再切换卡片列表与详情视图。</p>
+                    </div>
+                  </div>
+                  <div class="toolbar">
+                    <select id="record-source-filter"></select>
+                    <select id="record-rule-filter"></select>
+                    <input id="record-query-filter" type="text" placeholder="搜索当前页标题 / 来源 / 规则">
+                  </div>
+                </section>
+                <div id="history-summary" class="history-summary"></div>
+                <div id="history-chips" class="chip-row"></div>
+                <div class="subtabs">
+                  <button class="subtab active" data-tab="stored" type="button">条目</button>
+                  <button class="subtab" data-tab="evaluations" type="button">评估</button>
+                  <button class="subtab" data-tab="matches" type="button">命中</button>
+                  <button class="subtab" data-tab="notifications" type="button">通知</button>
+                  <button class="subtab" data-tab="health" type="button">健康</button>
+                  <button class="subtab" data-tab="audit" type="button">审计</button>
+                </div>
+                <section class="toolbar-card" style="margin-bottom: 14px;">
+                  <div class="toolbar">
+                    <button id="records-prev-button" type="button" class="ghost">上一页</button>
+                    <button id="records-next-button" type="button" class="ghost">下一页</button>
+                    <span class="muted" id="records-page-status">第 1 页</span>
+                  </div>
+                </section>
+                <div class="records-columns">
+                  <section class="records-column">
+                    <div class="section-heading">
+                      <div>
+                        <p class="section-kicker">Primary list</p>
+                        <h3>主列表</h3>
+                        <p class="section-copy">当前分页结果的主视图。</p>
+                      </div>
+                    </div>
+                    <div class="record-list" id="records-primary"></div>
+                  </section>
+                  <section class="records-column">
+                    <div class="section-heading">
+                      <div>
+                        <p class="section-kicker">Companion</p>
+                        <h3>辅助卡片</h3>
+                        <p class="section-copy">放提示、摘要或调度补充信息。</p>
+                      </div>
+                    </div>
+                    <div class="record-list" id="records-secondary"></div>
+                  </section>
+                  <section class="detail-panel" id="record-detail"></section>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="/static/dashboard.js"></script>
+</body>
+</html>
